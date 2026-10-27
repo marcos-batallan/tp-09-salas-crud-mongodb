@@ -13,7 +13,8 @@ function crearManejadorErrores({
 
     const esEntrada =
       esValidacion ||
-      error.name === "CastError" ||
+      //error.name === "CastError" ||
+      //error.codigo === "ENTRADA_INVALIDA" ||
       error.codigo === "ID_INVALIDO" ||
       error.codigo === "FILTRO_INVALIDO" ||
       error.type === "entity.parse.failed";
