@@ -107,9 +107,20 @@ function crearControladorReservas(servicioReservas) {
       req.cambiosValidos,
     );
     if (!reserva) {
-      return res.status(404).json({ error: "Recurso no encontrado." });
+      return res.status(404).json({ error: "Reserva no encontrada." });
     }
-    res.json(reserva);
+    return res.json(reserva);
+  }
+
+  async function actualizarApi(req, res) {
+    const reserva = await servicioReservas.actualizar(
+      req.params.id,
+      req.cambiosValidos,
+    );
+    if (!reserva) {
+      return res.status(404).json({ error: "Reserva no encontrada." });
+    }
+    return res.json(reserva);
   }
 
   return {
@@ -123,6 +134,7 @@ function crearControladorReservas(servicioReservas) {
     crearApi,
     eliminarApi,
     reemplazarApi,
+    actualizarApi,
   };
 }
 

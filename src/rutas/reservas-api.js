@@ -1,5 +1,8 @@
 const express = require("express");
-const { validarReemplazoReserva } = require("../middleware/cambios-reservas");
+const {
+  validarReemplazoReserva,
+  validarActualizacionReserva,
+} = require("../middleware/cambios-reservas");
 
 function crearRouterReservasApi(controladorReservas, validarReserva) {
   const router = express.Router();
@@ -13,6 +16,11 @@ function crearRouterReservasApi(controladorReservas, validarReserva) {
     validarReserva,
     validarReemplazoReserva,
     controladorReservas.reemplazarApi,
+  );
+  router.patch(
+    "/:id",
+    validarActualizacionReserva,
+    controladorReservas.actualizarApi,
   );
 
   return router;
