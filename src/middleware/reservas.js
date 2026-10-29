@@ -11,6 +11,28 @@ function crearValidadorReserva(servicioReservas) {
     const valores = req.body ?? {};
     const esApi = req.baseUrl === "/api/reservas";
 
+    // Aquí se rechaza cualquier campo adicional: por ejemplo, estado, _id, observaciones o $set
+    if (esApi && req.method === "POST") {
+      const camposPermitidos = [
+        "estudiante",
+        "email",
+        "sala",
+        "fecha",
+        "turno",
+        "personas",
+      ];
+
+      const camposNoPermitidos = Object.keys(req.body ?? {}).filter(
+        (campo) => !camposPermitidos.includes(campo),
+      );
+
+      if (camposNoPermitidos.length > 0) {
+        return res.status(400).json({
+          error: `El campo ${camposNoPermitidos[0]} no se puede modificar.`,
+        });
+      }
+    }
+
     const estudiante =
       typeof valores.estudiante === "string" ? valores.estudiante.trim() : "";
 
@@ -22,15 +44,17 @@ function crearValidadorReserva(servicioReservas) {
 
     const turno = typeof valores.turno === "string" ? valores.turno.trim() : "";
 
-    // HTML envía personas como texto; JSON debe enviar un número.
+    // HTML y la API pueden recibir personas como texto.
+    // Si es una cadena no vacía, se convierte a número para validarla.
     const personasTexto =
       typeof valores.personas === "string" ? valores.personas.trim() : "";
 
-    const personas = esApi
-      ? valores.personas
-      : personasTexto !== ""
+    const personas =
+      personasTexto !== ""
         ? Number(personasTexto)
-        : NaN;
+        : esApi
+          ? valores.personas
+          : NaN;
 
     const errores = [];
 
