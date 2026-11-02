@@ -55,13 +55,11 @@ function crearControladorReservas(servicioReservas) {
   // *** CONTROLADORES API ***
 
   async function listarApi(req, res) {
-    // Esta línea es para forzar el error controlado de prueba 500 Internal Server Error.
-    //throw new Error("Error interno de prueba");
 
     const sala = req.query.sala;
 
     // Si "sala" aparece repetido en la URL, Express puede
-    // representarlo como un arreglo. No aceptamos ese formato.
+    // representarlo como un arreglo. No se acepta ese formato.
     if (Array.isArray(sala)) {
       return res.status(400).json({
         error: "El parámetro 'sala' debe aparecer una sóla vez.",
